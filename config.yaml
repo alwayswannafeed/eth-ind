@@ -1,0 +1,17 @@
+log:
+  level: debug
+  disable_sentry: true
+
+db:
+  url: "postgres://eth_ind:password@db:5432/eth_ind?sslmode=disable"
+
+listener:
+  addr: :8000
+
+indexer:
+  rpc_sync_url: "https://mainnet.infura.io/v3/some-token"
+  rpc_hist_url: "https://eth-mainnet.g.alchemy.com/v2/some-token"
+  contract_address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48" # USDC
+  start_depth: 10000
+  sync_interval: "10s"
+  batch_size: 9 #Free-limit
