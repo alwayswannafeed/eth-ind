@@ -1,19 +1,11 @@
 package data
 
 import (
-	"encoding/hex"
 	"time"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 )
-
-const ResourceTypeTransfer = "transfers"
-
-type Key struct {
-	ID   string `json:"id"`
-	Type string `json:"type"`
-}
 
 type Transfer struct {
 	ID             uuid.UUID `db:"id"`
@@ -25,30 +17,6 @@ type Transfer struct {
 	FromAddr       []byte    `db:"from_addr"`
 	ToAddr         []byte    `db:"to_addr"`
 	Amount         string    `db:"amount"`
-}
-
-type TransferAttributes struct {
-	TxHash         string    `json:"tx_hash"`
-	BlockNumber    uint64    `json:"block_number"`
-	LogIndex       uint32    `json:"log_index"`
-	BlockHash      string    `json:"block_hash"`
-	BlockTimestamp time.Time `json:"block_timestamp"`
-	FromAddr       string    `json:"from_addr"`
-	ToAddr         string    `json:"to_addr"`
-	Amount         string    `json:"amount"`
-}
-
-type TransferResource struct {
-	Key
-	Attributes TransferAttributes `json:"attributes"`
-}
-
-type TransferResponse struct {
-	Data TransferResource `json:"data"`
-}
-
-type TransferListResponse struct {
-	Data []TransferResource `json:"data"`
 }
 
 type TransferSelector struct {
@@ -88,47 +56,6 @@ func (p PageParams) ApplyTo(stmt squirrel.SelectBuilder, cursorColumn string) sq
 	}
 
 	return stmt
-}
-
-func NewTransferResponse(t Transfer) TransferResponse {
-	return TransferResponse{
-		Data: NewTransferResource(t),
-	}
-}
-
-func NewTransferListResponse(list []Transfer) TransferListResponse {
-	resources := make([]TransferResource, 0, len(list))
-
-	for _, t := range list {
-		resources = append(resources, NewTransferResource(t))
-	}
-
-	return TransferListResponse{
-		Data: resources,
-	}
-}
-
-func NewTransferResource(t Transfer) TransferResource {
-	return TransferResource{
-		Key: Key{
-			ID:   t.ID.String(),
-			Type: ResourceTypeTransfer,
-		},
-		Attributes: TransferAttributes{
-			TxHash:         toHex(t.TxHash),
-			BlockNumber:    t.BlockNumber,
-			LogIndex:       t.LogIndex,
-			BlockHash:      toHex(t.BlockHash),
-			BlockTimestamp: t.BlockTimestamp,
-			FromAddr:       toHex(t.FromAddr),
-			ToAddr:         toHex(t.ToAddr),
-			Amount:         t.Amount,
-		},
-	}
-}
-
-func toHex(b []byte) string {
-	return "0x" + hex.EncodeToString(b)
 }
 
 type TransfersQ interface {

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/alwayswannafeed/eth-ind/internal/service/requests"
+	"github.com/alwayswannafeed/eth-ind/internal/service/resources"
 	"github.com/alwayswannafeed/eth-ind/internal/data"
 	"gitlab.com/distributed_lab/ape"
 	"gitlab.com/distributed_lab/ape/problems"
@@ -36,5 +37,5 @@ func GetTransfers(w http.ResponseWriter, r *http.Request) {
 		ape.RenderErr(w, problems.InternalError())
 		return
 	}
-	ape.Render(w, data.NewTransferListResponse(transfers))
+	ape.Render(w, resources.NewTransferListResponse(transfers))
 }

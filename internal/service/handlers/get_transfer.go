@@ -5,8 +5,8 @@ import (
 
 	"gitlab.com/distributed_lab/ape"
 	"gitlab.com/distributed_lab/ape/problems"
-	"github.com/alwayswannafeed/eth-ind/internal/data"
 	"github.com/alwayswannafeed/eth-ind/internal/service/requests"
+	"github.com/alwayswannafeed/eth-ind/internal/service/resources"
 )
 
 func GetTransferByID(w http.ResponseWriter, r *http.Request) {
@@ -29,5 +29,5 @@ func GetTransferByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ape.Render(w, data.NewTransferResponse(*transfer))
+	ape.Render(w, resources.NewTransferResponse(*transfer))
 }
