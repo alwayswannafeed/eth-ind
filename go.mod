@@ -8,10 +8,9 @@ require (
 	github.com/ethereum/go-ethereum v1.16.8
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/google/uuid v1.6.0
-	github.com/pkg/errors v0.9.1
 	github.com/rubenv/sql-migrate v1.8.1
 	gitlab.com/distributed_lab/ape v1.7.2
-	gitlab.com/distributed_lab/figure v2.1.2+incompatible
+	gitlab.com/distributed_lab/figure/v3 v3.1.4
 	gitlab.com/distributed_lab/kit v1.11.4
 	gitlab.com/distributed_lab/logan v3.8.1+incompatible
 )
@@ -49,6 +48,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/pelletier/go-toml/v2 v2.1.0 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/shirou/gopsutil v3.21.4-0.20210419000835-c7a38de76ee5+incompatible // indirect
@@ -62,7 +62,7 @@ require (
 	github.com/supranational/blst v0.3.16-0.20250831170142-f48500c1fdbe // indirect
 	github.com/tklauser/go-sysconf v0.3.12 // indirect
 	github.com/tklauser/numcpus v0.6.1 // indirect
-	gitlab.com/distributed_lab/figure/v3 v3.1.4 // indirect
+	gitlab.com/distributed_lab/figure v2.1.2+incompatible // indirect
 	gitlab.com/distributed_lab/lorem v0.2.0 // indirect
 	gitlab.com/distributed_lab/running v1.6.0 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
