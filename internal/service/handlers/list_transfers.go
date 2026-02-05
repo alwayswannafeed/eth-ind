@@ -1,41 +1,20 @@
 package handlers
 
 import (
-	"encoding/json"
 	"net/http"
-	"time"
 
+	"github.com/alwayswannafeed/eth-ind/internal/service/requests"
 	"github.com/alwayswannafeed/eth-ind/internal/data"
 	"gitlab.com/distributed_lab/ape"
 	"gitlab.com/distributed_lab/ape/problems"
 )
 
-type TransferRequest struct {
-	Filters struct {
-		Sender      *string    `json:"sender"`
-		Receiver    *string    `json:"receiver"`
-		Participant *string    `json:"participant"`
-		TimeFrom    *time.Time `json:"time_from"`
-		TimeTo      *time.Time `json:"time_to"`
-	} `json:"filters"`
-	Page struct {
-		Limit  uint64 `json:"limit"`
-		Cursor uint64 `json:"cursor"`
-		Order  string `json:"order"`
-	} `json:"page"`
-}
-
 func GetTransfers(w http.ResponseWriter, r *http.Request) {
-	req := TransferRequest{}
-	req.Page.Limit = 15
-	req.Page.Order = "desc"
-
-	if r.Body != nil && r.ContentLength > 0 {
-		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-			Log(r).WithError(err).Error("failed to decode request body")
-			ape.RenderErr(w, problems.BadRequest(err)...)
-			return
-		}
+	req, err := requests.NewListTransfersRequest(r)
+	if err != nil {
+		Log(r).WithError(err).Warn("failed to parse request") 
+		ape.RenderErr(w, problems.BadRequest(err)...)
+		return
 	}
 
 	selector := data.TransferSelector{

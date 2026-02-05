@@ -1,26 +1,23 @@
 package handlers
 
 import (
-	//"encoding/hex"
 	"net/http"
 
-	"github.com/go-chi/chi"
-	"github.com/google/uuid"
 	"gitlab.com/distributed_lab/ape"
 	"gitlab.com/distributed_lab/ape/problems"
 	"github.com/alwayswannafeed/eth-ind/internal/data"
+	"github.com/alwayswannafeed/eth-ind/internal/service/requests"
 )
 
 func GetTransferByID(w http.ResponseWriter, r *http.Request) {
-	idStr := chi.URLParam(r, "id")
-	id, err := uuid.Parse(idStr)
+	req, err := requests.NewGetTransferRequest(r)
 	if err != nil {
 		Log(r).WithError(err).Warn("failed to parse transfer id")
 		ape.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
 
-	transfer, err := Storage(r).Transfers().GetByID(id)
+	transfer, err := Storage(r).Transfers().GetByID(req.ID)
 	if err != nil {
 		Log(r).WithError(err).Error("failed to get transfer by id")
 		ape.RenderErr(w, problems.InternalError())
