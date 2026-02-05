@@ -8,6 +8,13 @@ import (
 	"github.com/google/uuid"
 )
 
+const ResourceTypeTransfer = "transfers"
+
+type Key struct {
+	ID   string `json:"id"`
+	Type string `json:"type"`
+}
+
 type Transfer struct {
 	ID             uuid.UUID `db:"id"`
 	TxHash         []byte    `db:"tx_hash"`
@@ -20,8 +27,7 @@ type Transfer struct {
 	Amount         string    `db:"amount"`
 }
 
-type TransferResource struct {
-	ID             string    `json:"id"`
+type TransferAttributes struct {
 	TxHash         string    `json:"tx_hash"`
 	BlockNumber    uint64    `json:"block_number"`
 	LogIndex       uint32    `json:"log_index"`
@@ -30,6 +36,19 @@ type TransferResource struct {
 	FromAddr       string    `json:"from_addr"`
 	ToAddr         string    `json:"to_addr"`
 	Amount         string    `json:"amount"`
+}
+
+type TransferResource struct {
+	Key
+	Attributes TransferAttributes `json:"attributes"`
+}
+
+type TransferResponse struct {
+	Data TransferResource `json:"data"`
+}
+
+type TransferListResponse struct {
+	Data []TransferResource `json:"data"`
 }
 
 type TransferSelector struct {
@@ -71,16 +90,31 @@ func (p PageParams) ApplyTo(stmt squirrel.SelectBuilder, cursorColumn string) sq
 	return stmt
 }
 
-type TransferListResponse struct {
-	Data []TransferResource `json:"data"`
+func NewTransferResponse(t Transfer) TransferResponse {
+	return TransferResponse{
+		Data: NewTransferResource(t),
+	}
 }
 
 func NewTransferListResponse(list []Transfer) TransferListResponse {
 	resources := make([]TransferResource, 0, len(list))
 
 	for _, t := range list {
-		resources = append(resources, TransferResource{
-			ID:             t.ID.String(),
+		resources = append(resources, NewTransferResource(t))
+	}
+
+	return TransferListResponse{
+		Data: resources,
+	}
+}
+
+func NewTransferResource(t Transfer) TransferResource {
+	return TransferResource{
+		Key: Key{
+			ID:   t.ID.String(),
+			Type: ResourceTypeTransfer,
+		},
+		Attributes: TransferAttributes{
 			TxHash:         toHex(t.TxHash),
 			BlockNumber:    t.BlockNumber,
 			LogIndex:       t.LogIndex,
@@ -89,11 +123,7 @@ func NewTransferListResponse(list []Transfer) TransferListResponse {
 			FromAddr:       toHex(t.FromAddr),
 			ToAddr:         toHex(t.ToAddr),
 			Amount:         t.Amount,
-		})
-	}
-
-	return TransferListResponse{
-		Data: resources,
+		},
 	}
 }
 

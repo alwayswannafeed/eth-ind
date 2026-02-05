@@ -8,6 +8,11 @@ import (
 	"gitlab.com/distributed_lab/ape/problems"
 )
 
+type StatusResponse struct {
+	HistoryDate *time.Time `json:"history_reached_date"` 
+	CurrentTime time.Time  `json:"current_server_time"`
+}
+
 func GetStatus(w http.ResponseWriter, r *http.Request) {
 	earliestTime, err := Storage(r).Transfers().GetEarliestBlockTime()
 	if err != nil {

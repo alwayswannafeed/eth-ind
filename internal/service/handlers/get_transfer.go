@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"encoding/hex"
+	//"encoding/hex"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -32,17 +32,5 @@ func GetTransferByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ape.Render(w, newTransferResponse(*transfer))
-}
-
-func newTransferResponse(t data.Transfer) TransferResponse {
-	return TransferResponse{
-		ID:             t.ID,
-		TxHash:         "0x" + hex.EncodeToString(t.TxHash),
-		BlockNumber:    t.BlockNumber,
-		BlockTimestamp: t.BlockTimestamp,
-		FromAddr:       "0x" + hex.EncodeToString(t.FromAddr),
-		ToAddr:         "0x" + hex.EncodeToString(t.ToAddr),
-		Amount:         t.Amount,
-	}
+	ape.Render(w, data.NewTransferResponse(*transfer))
 }
